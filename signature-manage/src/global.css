@@ -1,0 +1,27 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.ant-descriptions-view,
+.ant-list-bordered {
+  border: none !important;
+}
+
+.ant-descriptions-title {
+  min-height: 48px !important;
+  margin-bottom: 0px !important;
+  padding: 0 24px !important;
+  color: rgba(0, 0, 0, 0.85) !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  background: transparent !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+  border-radius: 2px 2px 0 0 !important;
+  zoom: 1 !important;
+}

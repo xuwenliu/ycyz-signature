@@ -1,0 +1,27 @@
+.searchline {
+  display: flex;
+}
+.inps {
+  width: 270px;
+  display: flex;
+}
+.inps input {
+  width: 70%;
+}
+.labels {
+  margin-right: 10px;
+  line-height: 32px;
+}
+.selectline {
+  width: 200px;
+  display: flex;
+}
+.mgt20 {
+  margin-top: 20px;
+}
+.colorgreen {
+  color: #5fca71;
+}
+.colorred {
+  color: #ec5851;
+}
