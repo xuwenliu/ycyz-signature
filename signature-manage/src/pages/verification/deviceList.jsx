@@ -26,7 +26,8 @@ class DeviceList extends React.Component {
     };
   }
   componentDidMount() {
-    this.getList()
+      const { location: { query } } = this.props;
+      this.getList(query.username,query.name)
     this.props.user.backBtnDom && this.props.user.backBtnDom.addEventListener('click', () => {
       this.props.changeTab('1')
     })

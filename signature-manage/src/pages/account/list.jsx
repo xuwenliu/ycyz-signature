@@ -105,7 +105,7 @@ class account_index extends React.Component {
                   <List.Item.Meta
                     avatar={<Avatar icon="user" />}
                     title={<span>{item.account}</span>}
-                    description={<><span>创建时间: {item.create_time}</span> <span>可用数量: {item.count}</span></>}
+                    description={<><span>创建时间: {item.createTime}</span> <span>可用数量: {item.count}</span></>}
                   />
                 </List.Item>
               )

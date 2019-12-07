@@ -126,7 +126,7 @@ class New extends React.Component {
 					message.error('图片大小不能超过1MB');
 					return false;
 				}
-				return true;
+				return false;
 			},
 
 			onChange: ({ fileList }) => {
@@ -137,6 +137,7 @@ class New extends React.Component {
 				}
 				//只能上传6张
 				fileList = fileList.slice(0, 6);
+				console.log(fileList)
 				this.setState({ imgFileList: fileList });
 			},
 			onRemove: (file) => {
@@ -195,7 +196,8 @@ class New extends React.Component {
 					<Button
 						type="primary"
 						onClick={this.handleUpload}
-						disabled={fileList.length === 0 || imgFileList.length === 0}
+						// disabled={fileList.length === 0 || imgFileList.length === 0}
+						disabled={fileList.length === 0}
 						loading={uploading}
 						style={{ marginTop: 16 }}
 						block

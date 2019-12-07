@@ -2,7 +2,7 @@
 export default {
   "proxy": {
     "/api": {
-      "target": "http://10.18.4.35:8082",
+      "target": "http://10.18.4.88:8082",
       "changeOrigin": true,
     }
   },

@@ -13,6 +13,7 @@ export default {
     USER_CHANGE_MONEY:'user/changeMoney', //余额充值
     USER_GET_DEPOSIT_RECORD: "user/getAllOrder", // 充值记录
     USER_GET_RECHANGE_WAY: "user/getRechangeWay", // 充值方式
+    USER_UPDATE_CHAREG_MONEY:'user/updateChargeMoney', //单次下载收费金额
 
     
     // apps

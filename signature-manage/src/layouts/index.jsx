@@ -26,6 +26,7 @@ import {
 import { connect } from 'dva';
 import styles from './index.less';
 import routes from '../routes';
+import { log } from 'util';
 
 // 将 model 和 component 串联起来
 @connect(({ user, loading }) => ({
@@ -262,18 +263,31 @@ class BasicLayout extends Component {
 						},
 						...routers,
 					]}
+					// itemRender={(route, params, routes, paths) => {
+					// 	console.log(route,"12");
+						
+					// 	if (routes.indexOf(route) === routes.length - 1) {
+					// 		return (<span>{route.breadcrumbName}</span>)
+					// 	}
+					// 	return (<Link to={route.path}>{route.breadcrumbName}</Link>)
+					// }}
+
+
 					itemRender={(route, params, routes, paths) => {
-						if (routes.indexOf(route) === routes.length - 1) {
-							return (<span>{route.breadcrumbName}</span>)
-						}
-						return (<Link to={route.path}>{route.breadcrumbName}</Link>)
-					}}
-					menuItemRender={(menuItemProps, defaultDom) => {
-						return menuItemProps.isUrl ? (
-							defaultDom
+						const first = routes.indexOf(route) === 0;
+						return first ? (
+						  <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
 						) : (
-								<Link to={menuItemProps.path}>{defaultDom}</Link>
-							)
+						  <span>{route.breadcrumbName}</span>
+						);
+					}}
+					
+					menuItemRender={(menuItemProps, defaultDom) => {
+						if (menuItemProps.isUrl || menuItemProps.children) {
+							return defaultDom;
+						}
+						return <Link to={menuItemProps.path}>{defaultDom}</Link>
+
 					}}
 
 					footerRender={() => (<div style={{ margin: '1rem auto' }}>Copyright&copy;2019 Signature Manage</div>)}

@@ -28,10 +28,12 @@ import {
 	userChangeStatus,
 	searchUser,
 	addMoney,
+	updateChargeMoney
 } from '../../services/user';
 
 const { Option } = Select;
 const { confirm } = Modal;
+
 const InputForm = Form.create({
 	name: 'InputForm',
 	onFieldsChange(props, changedFields) {
@@ -58,6 +60,10 @@ const InputForm = Form.create({
 		</Form>
 	);
 });
+
+
+
+
 
 @connect((state) => {
 	return {
@@ -86,6 +92,9 @@ class Verification extends React.Component {
 					value: '',
 				},
 			},
+			showEditChargeMoney: false,
+			id: 0,
+			submitChargeMoneyloading:false
 		};
 		this.accountStatusList = [
 			{
@@ -217,6 +226,38 @@ class Verification extends React.Component {
 		});
 	};
 
+	addChargeMoney = () => {
+
+		this.chargeMoneyForm.props.form.validateFields(async (err, values) => {
+			if (!err) {
+				this.setState({
+					submitChargeMoneyloading: true
+				})
+				let { data: res } = await updateChargeMoney({
+					id: this.state.id,
+					chargeMoney: values.chargeMoney,
+				});
+				if (res.code === 1) {
+					this.resetChargeMoney();
+					this.getList(this.state.tabs, '');
+					message.success(res.msg);
+				} else {
+					message.error(res.msg);
+				}
+				this.setState({
+					submitChargeMoneyloading: false
+				})
+			}
+		})
+	}
+
+	resetChargeMoney = () => {
+		this.setState({
+			showEditChargeMoney: false
+		})
+		this.chargeMoneyForm.props.form.resetFields();
+	}
+
 	confirms = (status, item) => {
 		let vals = status === 1 ? 2 : status === 2 ? 3 : null;
 		let content = status === 1 ? '确定通过审核吗？' : status === 2 ? '确定拒绝吗？' : null;
@@ -256,7 +297,10 @@ class Verification extends React.Component {
 			visible,
 			fields,
 			username,
-			activeKey
+			activeKey,
+			showEditChargeMoney,
+			chargeMoney,
+			submitChargeMoneyloading
 		} = this.state;
 
 		const passColumns = [
@@ -271,6 +315,21 @@ class Verification extends React.Component {
 				dataIndex: 'createTime',
 				key: 'createTime',
 				align: 'center',
+			},
+			{
+				title: '单次收费金额',
+				dataIndex: 'chargeMoney',
+				key: 'chargeMoney',
+				align: 'center',
+				render: (text, record) => {
+					return <Button onClick={() => {
+						this.setState({
+							showEditChargeMoney: true,
+							chargeMoney: record.chargeMoney,
+							id: record.id
+						})
+					}} type="link">{record.chargeMoney}</Button>
+				}
 			},
 			{
 				title: '账户余额',
@@ -347,7 +406,7 @@ class Verification extends React.Component {
 								type="primary"
 								size="small"
 								onClick={() => {
-									router.push({ pathname: '/verification/deviceList', query: { id: item.id } });
+									router.push({ pathname: '/verification/deviceList', query: { username: item.username, name: '' } });
 								}}
 							>
 								查看
@@ -557,6 +616,17 @@ class Verification extends React.Component {
 							>
 								<InputForm {...fields} onChange={this.handleFormChange} />
 							</Modal>
+
+							<Modal
+								confirmLoading={submitChargeMoneyloading}
+								centered={true}
+								title="单次下载收费金额"
+								visible={showEditChargeMoney}
+								onOk={this.addChargeMoney}
+								onCancel={this.resetChargeMoney}
+							>
+								<ChargeMoneyForm chargeMoney={chargeMoney} wrappedComponentRef={(money) => { this.chargeMoneyForm = money; }} />
+							</Modal>
 						</div>
 					</Tabs.TabPane>
 					<Tabs.TabPane tab="已拒绝" key="2">
@@ -596,6 +666,44 @@ class Verification extends React.Component {
 				</Tabs>
 			</Card>
 		);
+	}
+}
+
+
+@Form.create()
+class ChargeMoneyForm extends React.Component {
+
+	render() {
+		const { getFieldDecorator } = this.props.form;
+		const { chargeMoney } = this.props;
+		const formItemLayout = {
+			labelCol: {
+				xs: { span: 24 },
+				sm: { span: 10 },
+			},
+			wrapperCol: {
+				xs: { span: 24 },
+				sm: { span: 12 },
+			},
+		};
+		return (<Form {...formItemLayout}>
+
+			<Form.Item label="单次下载收费金额" hasFeedback>
+				{getFieldDecorator('chargeMoney', {
+					initialValue: chargeMoney,
+					rules: [
+						{
+							required: true,
+							message: '请输入单次下载收费金额!',
+						},
+						{
+							pattern: /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/,
+							message: '金额格式不正确!',
+						}
+					],
+				})(<Input placeholder="请输入单次下载收费金额" autoComplete="off" />)}
+			</Form.Item>
+		</Form>)
 	}
 }
 

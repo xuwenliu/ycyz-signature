@@ -98,3 +98,12 @@ export function getRechangeWay() {
 		data: {},
 	})
 }
+
+export function updateChargeMoney(data) {
+	return request({
+		url: api.USER_UPDATE_CHAREG_MONEY,
+		method: 'POST',
+		data,
+	})
+}
+
